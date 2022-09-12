@@ -1,0 +1,25 @@
+.login-wrapper {
+  display: flex;
+}
+
+.login-wrapper .login-showcase,
+.login-wrapper .login-form {
+  flex: 1;
+}
+
+.login-wrapper .login-form {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+}
+
+.showcase {
+  background: url("login-showcase.png") no-repeat center center/cover;
+  height: 100vh;
+  max-width: 50%;
+}
+
+.banner {
+  background: url("altimetrik-banner.png") no-repeat;
+  width: 100%;
+}
