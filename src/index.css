@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+#remember-box.checked\:bg-orange-500:checked + .check-1 {
+  color: white !important;
+  @apply opacity-100 !important;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

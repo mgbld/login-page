@@ -1,94 +1,93 @@
 import React from "react";
-import { Formik } from "formik";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import "./Login.css";
 
-const Login = () => (
-  <div>
-    <Formik
-      initialValues={{ email: "", password: "" }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.email) {
-          errors.email = "Required";
-        } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-        ) {
-          errors.email = "Invalid email address";
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
-      }}>
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        /* and other goodies */
-      }) => (
-        <div class='max-w-sm'>
-          <form class='bg-gray-50 rounded-lg px-8 pt-8 pb-8'>
-            <div className='mb-7'>
-              <span className='text-2xl font-semibold text-gray-700'>
-                Login
-              </span>
-              <p className='text-gray-400 mt-4 text-xl'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Curabitur mattis nibh ut enim ullamcorper accumsan. Sed quis
-                erat ullamcorper, congue metus ac, ullamcorper magna.
-              </p>
-            </div>
-            <div className='mb-6'>
-              <input
-                className='border border-gray-300 rounded-md w-full py-1 px-3 text-gray-700 text-md  focus:outline-none placeholder-gray-300'
-                id='username'
-                type='text'
-                placeholder='E-mail'
-              />
-            </div>
-            <div className='mb-6'>
-              <input
-                className='border border-gray-300 rounded-md w-full py-1 px-3 text-gray-700 text-md  focus:outline-none placeholder-gray-300'
-                id='password'
-                type='password'
-                placeholder='Password'
-              />
-            </div>
-            <div className='mb-5'>
-              <input
-                class='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-md bg-white checked:bg-orange-500 checked:border-orange-500 focus:outline-none mt-1 bg-center float-left mr-2 cursor-pointer'
-                type='checkbox'
-                value=''
-                id='flexCheckDefault'
-              />
-              <label
-                class='form-check-label inline-block text-gray-400 text-sm'
-                for='flexCheckDefault'>
-                Remember me
-              </label>
-            </div>
-            <div className='flex items-center justify-between mb-3'>
-              <button
-                className='bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded focus:outline-none w-screen text-xl'
-                type='button'>
-                Login
-              </button>
-            </div>
-            <a href='!#' className='text-md text-blue-500'>
-              Forgot Password?
-            </a>
-          </form>
+const Login = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .max(15, "Must be 15 characters or less")
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
+  return (
+    <div className='max-w-sm font-poppins px-3'>
+      <form
+        className='bg-gray-50 rounded-lg px-8 pt-8 pb-8'
+        onSubmit={formik.handleSubmit}>
+        <div className='mb-7'>
+          <span className='text-xl font-semibold text-gray-700'>Login</span>
+          <p className='text-gray-400 mt-4'>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            mattis nibh ut enim ullamcorper accumsan. Sed quis erat ullamcorper,
+            congue metus ac, ullamcorper magna.
+          </p>
         </div>
-      )}
-    </Formik>
-  </div>
-);
+        <div className='mb-6'>
+          <input
+            className='border border-gray-300 rounded-md w-full py-1 px-3 text-gray-700 text-md  focus:outline-none placeholder-gray-300'
+            id='email'
+            type='text'
+            placeholder='E-mail'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          {formik.errors.email && formik.touched.email ? (
+            <p className='text-red-500 mt-2'>{formik.errors.email}</p>
+          ) : null}
+        </div>
+        <div className='mb-6'>
+          <input
+            className='border border-gray-300 rounded-md w-full py-1 px-3 text-gray-700 text-md  focus:outline-none placeholder-gray-300'
+            id='password'
+            type='password'
+            placeholder='Password'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+          />
+          {formik.errors.password && formik.touched.password ? (
+            <p className='text-red-500 mt-2'>{formik.errors.password}</p>
+          ) : null}
+        </div>
+        <div className='mb-6'>
+          <input
+            className='appearance-none h-5 w-5 border border-gray-300 rounded-md bg-white checked:bg-orange-500 checked:border-orange-500 focus:outline-none bg-center float-left mr-2 mt-[2px] cursor-pointer'
+            type='checkbox'
+            value=''
+            id='flexCheckDefault'
+          />
+
+          <label
+            className=' text-gray-400 text-md block'
+            htmlFor='flexCheckDefault'>
+            Remember me
+          </label>
+        </div>
+        <div className='flex items-center justify-between mb-3'>
+          <button
+            className='bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded focus:outline-none w-screen '
+            type='button'>
+            Login
+          </button>
+        </div>
+        <a href='!#' className='text-md text-blue-500'>
+          Forgot Password?
+        </a>
+      </form>
+    </div>
+  );
+};
 
 export default Login;
